@@ -8,6 +8,7 @@ echo 'net.ipv6.conf.default.disable_ipv6 = 1' >> /etc/sysctl.conf
 echo 'net.ipv6.conf.lo.disable_ipv6 = 1' >> /etc/sysctl.conf
 sudo sysctl -p
 
+mkdir -p "/etc/resolvconf/resolv.conf.d/"
 echo 'nameserver 8.8.8.8' >> /etc/resolvconf/resolv.conf.d/tail
 resolvconf -u
 
