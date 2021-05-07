@@ -6,7 +6,7 @@ templates:
     mem: 2048
     name: ubuntu-20.04_k8-1.20_antrea-0.13
     revision: 1
-    kind: tkgm
+    kind: native
     sha256_ova: c7033a0dd298f6f96b1e50e93121d02d967dad9d4a618de5a21bfd33db7b8f36
     source_ova: "https://cloud-images.ubuntu.com/releases/focal/release-20210429/ubuntu-20.04-server-cloudimg-amd64.ova"
     source_ova_name: ubuntu-20.04-server-cloudimg-amd64.ova
