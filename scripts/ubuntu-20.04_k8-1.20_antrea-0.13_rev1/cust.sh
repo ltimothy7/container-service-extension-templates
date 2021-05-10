@@ -72,7 +72,7 @@ apt-get -y -q -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-c
 export kubever=$(kubectl version --client | base64 | tr -d '\n')
 /sbin/modprobe openvswitch
 /sbin/lsmod | grep openvswitch
-wget --no-verbose -O /root/antrea_0.11.0.yaml https://github.com/vmware-tanzu/antrea/releases/download/v0.11.1/antrea.yml
+wget --no-verbose -O /root/antrea_0.11.3.yaml https://github.com/vmware-tanzu/antrea/releases/download/v0.11.3/antrea.yml
 #wget --no-verbose -O /root/weave_v2-6-5.yml "https://cloud.weave.works/k8s/net?k8s-version=$kubever&v=2.6.5"
 
 # /etc/machine-id must be empty so that new machine-id gets assigned on boot (in our case boot is vApp deployment)

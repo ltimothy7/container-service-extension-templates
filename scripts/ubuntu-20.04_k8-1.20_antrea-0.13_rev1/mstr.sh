@@ -7,6 +7,6 @@ cp -f /etc/kubernetes/admin.conf /root/.kube/config
 chown $(id -u):$(id -g) /root/.kube/config
 
 export kubever=$(kubectl version --client | base64 | tr -d '\n')
-kubectl apply -f /root/antrea_0.11.0.yaml
+kubectl apply -f /root/antrea_0.11.3.yaml
 systemctl restart kubelet
 while [ `systemctl is-active kubelet` != 'active' ]; do echo 'waiting for kubelet'; sleep 5; done
