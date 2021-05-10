@@ -8,19 +8,29 @@ echo 'net.ipv6.conf.default.disable_ipv6 = 1' >> /etc/sysctl.conf
 echo 'net.ipv6.conf.lo.disable_ipv6 = 1' >> /etc/sysctl.conf
 sudo sysctl -p
 
-#echo 'nameserver 8.8.8.8' >> /etc/resolvconf/resolv.conf.d/tail  --orig
+# setup resolvconf for ubuntu 20
+echo 'nameserver 8.8.4.4' >> /etc/resolv.conf
 echo 'nameserver 8.8.8.8' >> /etc/resolv.conf
+apt update
 apt install resolvconf
+systemctl restart resolvconf.service
+echo 'nameserver 8.8.8.8' >> /etc/resolvconf/resolv.conf.d/head
+echo 'nameserver 8.8.4.4' >> /etc/resolvconf/resolv.conf.d/head
+resolvconf --enable-updates
+resolvconf -u
 
-systemctl restart networking.service
-while [ `systemctl is-active networking` != 'active' ]; do echo 'waiting for network'; sleep 5; done
+#systemctl restart networking.service
+systemctl restart systemd-networkd.service
+while [ `systemctl is-active systemd-networkd` != 'active' ]; do echo 'waiting for network'; sleep 5; done
 
 growpart /dev/sda 1 || :
 resize2fs /dev/sda1 || :
 
 # redundancy: https://github.com/vmware/container-service-extension/issues/432
-systemctl restart networking.service
-while [ `systemctl is-active networking` != 'active' ]; do echo 'waiting for network'; sleep 5; done
+#systemctl restart networking.service
+#while [ `systemctl is-active networking` != 'active' ]; do echo 'waiting for network'; sleep 5; done
+systemctl restart systemd-networkd.service
+while [ `systemctl is-active systemd-networkd` != 'active' ]; do echo 'waiting for network'; sleep 5; done
 
 echo 'installing kubernetes'
 export DEBIAN_FRONTEND=noninteractive
