@@ -14,6 +14,8 @@ echo 'nameserver 8.8.8.8' >> /etc/resolv.conf
 apt update
 apt install resolvconf
 systemctl restart resolvconf.service
+echo 'nameserver 10.16.188.210' >> /etc/resolvconf/resolv.conf.d/head
+echo 'nameserver 10.118.254.1' >> /etc/resolvconf/resolv.conf.d/head
 echo 'nameserver 8.8.8.8' >> /etc/resolvconf/resolv.conf.d/head
 echo 'nameserver 8.8.4.4' >> /etc/resolvconf/resolv.conf.d/head
 resolvconf --enable-updates
@@ -47,15 +49,16 @@ wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/l
 wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/executables/kubectl-linux-v1.20.4+vmware.1.gz
 wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/executables/kubelet-linux-v1.20.4+vmware.1.gz
 gzip -d kubeadm-linux-v1.20.4+vmware.1.gz kubectl-linux-v1.20.4+vmware.1.gz kubelet-linux-v1.20.4+vmware.1.gz
-chmod +x kubeadm-linux-v1.20.4+vmware.1.gz
-chmod +x kubectl-linux-v1.20.4+vmware.1.gz
-chmod +x kubelet-linux-v1.20.4+vmware.1.gz
-cp kubeadm-linux-v1.20.4+vmware.1.gz /usr/local/bin/kubeadm
-cp kubectl-linux-v1.20.4+vmware.1.gz /usr/local/bin/kubectl
-cp kubelet-linux-v1.20.4+vmware.1.gz /usr/local/bin/kubelet
+chmod +x kubeadm-linux-v1.20.4+vmware.1
+chmod +x kubectl-linux-v1.20.4+vmware.1
+chmod +x kubelet-linux-v1.20.4+vmware.1
+cp kubeadm-linux-v1.20.4+vmware.1 /usr/local/bin/kubeadm
+cp kubectl-linux-v1.20.4+vmware.1 /usr/local/bin/kubectl
+cp kubelet-linux-v1.20.4+vmware.1 /usr/local/bin/kubelet
 
-apt-get -q install -y docker-ce=5:19.03.15~3-0~ubuntu-focal
+#apt-get -q install -y docker-ce=5:19.03.15~3-0~ubuntu-focal
 #apt-get -q install -y kubelet=1.20.6-00 kubeadm=1.20.6-00 kubectl=1.20.6-00 kubernetes-cni=0.8.7-00
+apt install -y docker.io
 systemctl restart docker
 while [ `systemctl is-active docker` != 'active' ]; do echo 'waiting for docker'; sleep 5; done
 
@@ -66,10 +69,10 @@ systemctl disable nfs-kernel-server.service
 
 # prevent updates to software that CSE depends on
 apt-mark hold open-vm-tools
-apt-mark hold docker-ce
-apt-mark hold kubelet
-apt-mark hold kubeadm
-apt-mark hold kubectl
+apt-mark hold docker
+#apt-mark hold kubelet
+#apt-mark hold kubeadm
+#apt-mark hold kubectl
 #apt-mark hold kubernetes-cni
 apt-mark hold nfs-common
 apt-mark hold nfs-kernel-server
@@ -81,7 +84,6 @@ apt-get -y -q -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-c
 # Download weave.yml to /root/weave_v2-6-5.yml
 export kubever=$(kubectl version --client | base64 | tr -d '\n')
 /sbin/modprobe openvswitch
-/sbin/lsmod | grep openvswitch
 wget --no-verbose -O /root/antrea_0.11.3.yaml https://github.com/vmware-tanzu/antrea/releases/download/v0.11.3/antrea.yml
 #wget --no-verbose -O /root/weave_v2-6-5.yml "https://cloud.weave.works/k8s/net?k8s-version=$kubever&v=2.6.5"
 
