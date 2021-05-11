@@ -40,6 +40,11 @@ apt-get -q update -o Acquire::Retries=3 -o Acquire::http::No-Cache=True -o Acqui
 apt-get -q install -y apt-transport-https ca-certificates curl software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+apt-get -q update -o Acquire::Retries=3 -o Acquire::http::No-Cache=True -o Acquire::http::Timeout=30 -o Acquire::https::No-Cache=True -o Acquire::https::Timeout=30 -o Acquire::ftp::Timeout=30
+apt install docker-ce=5:19.03.15~3-0~ubuntu-focal
+systemctl restart docker
+while [ `systemctl is-active docker` != 'active' ]; do echo 'waiting for docker'; sleep 5; done
 #cat <<EOF > /etc/apt/sources.list.d/kubernetes.list
 #deb http://apt.kubernetes.io/ kubernetes-xenial main
 #EOF
@@ -56,11 +61,6 @@ cp kubeadm-linux-v1.20.4+vmware.1 /usr/local/bin/kubeadm
 cp kubectl-linux-v1.20.4+vmware.1 /usr/local/bin/kubectl
 cp kubelet-linux-v1.20.4+vmware.1 /usr/local/bin/kubelet
 
-#apt-get -q install -y docker-ce=5:19.03.15~3-0~ubuntu-focal
-#apt-get -q install -y kubelet=1.20.6-00 kubeadm=1.20.6-00 kubectl=1.20.6-00 kubernetes-cni=0.8.7-00
-apt install -y docker.io
-systemctl restart docker
-while [ `systemctl is-active docker` != 'active' ]; do echo 'waiting for docker'; sleep 5; done
 
 echo 'installing required software for NFS'
 apt-get -q install -y nfs-common nfs-kernel-server
