@@ -40,26 +40,40 @@ apt-get -q update -o Acquire::Retries=3 -o Acquire::http::No-Cache=True -o Acqui
 apt-get -q install -y apt-transport-https ca-certificates curl software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-apt-get -q update -o Acquire::Retries=3 -o Acquire::http::No-Cache=True -o Acquire::http::Timeout=30 -o Acquire::https::No-Cache=True -o Acquire::https::Timeout=30 -o Acquire::ftp::Timeout=30
-apt-get install -y docker-ce=5:19.03.15~3-0~ubuntu-focal docker-ce-cli=5:19.03.15~3-0~ubuntu-focal containerd.io
+# 'http://apt.kubernetes.io kubernetes-focal Release' does not have a Release file, so using xenial
+echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" >> /etc/apt/sources.list.d/kubernetes.list
+apt update
+#add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal main"
+#apt-get -q update -o Acquire::Retries=3 -o Acquire::http::No-Cache=True -o Acquire::http::Timeout=30 -o Acquire::https::No-Cache=True -o Acquire::https::Timeout=30 -o Acquire::ftp::Timeout=30
+apt-get -q install -y kubernetes-cni=0.8.7-00
+apt-get -q install -y docker-ce=5:19.03.15~3-0~ubuntu-focal
 systemctl restart docker
 while [ `systemctl is-active docker` != 'active' ]; do echo 'waiting for docker'; sleep 5; done
+
 #cat <<EOF > /etc/apt/sources.list.d/kubernetes.list
-#deb http://apt.kubernetes.io/ kubernetes-xenial main
+#deb http://apt.kubernetes.io/ kubernetes-focal main
 #EOF
 #add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 #apt-get -q update -o Acquire::Retries=3 -o Acquire::http::No-Cache=True -o Acquire::http::Timeout=30 -o Acquire::https::No-Cache=True -o Acquire::https::Timeout=30 -o Acquire::ftp::Timeout=30
-wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/executables/kubeadm-linux-v1.20.4+vmware.1.gz
-wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/executables/kubectl-linux-v1.20.4+vmware.1.gz
-wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/executables/kubelet-linux-v1.20.4+vmware.1.gz
-gzip -d kubeadm-linux-v1.20.4+vmware.1.gz kubectl-linux-v1.20.4+vmware.1.gz kubelet-linux-v1.20.4+vmware.1.gz
-chmod +x kubeadm-linux-v1.20.4+vmware.1
-chmod +x kubectl-linux-v1.20.4+vmware.1
-chmod +x kubelet-linux-v1.20.4+vmware.1
-cp kubeadm-linux-v1.20.4+vmware.1 /usr/local/bin/kubeadm
-cp kubectl-linux-v1.20.4+vmware.1 /usr/local/bin/kubectl
-cp kubelet-linux-v1.20.4+vmware.1 /usr/local/bin/kubelet
+#wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/executables/kubeadm-linux-v1.20.4+vmware.1.gz
+#wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/executables/kubectl-linux-v1.20.4+vmware.1.gz
+#wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/executables/kubelet-linux-v1.20.4+vmware.1.gz
+wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/debs/kubeadm_1.20.4+vmware.1-1_amd64.deb
+wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/debs/kubectl_1.20.4+vmware.1-1_amd64.deb
+wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/debs/kubelet_1.20.4+vmware.1-1_amd64.deb
+# Installing all three at once since they depend on one another
+apt install ./kubeadm_1.20.4+vmware.1-1_amd64.deb ./kubectl_1.20.4+vmware.1-1_amd64.deb ./kubelet_1.20.4+vmware.1-1_amd64.deb
+systemctl restart kubelet
+while [ `systemctl is-active kubelet` != 'active' ]; do echo 'waiting for kubelet'; sleep 5; done
+
+#dpkg -i kubeadm_1.20.4+vmware.1-1_amd64.deb
+#gzip -d kubeadm-linux-v1.20.4+vmware.1.gz kubectl-linux-v1.20.4+vmware.1.gz kubelet-linux-v1.20.4+vmware.1.gz
+#chmod +x kubeadm-linux-v1.20.4+vmware.1
+#chmod +x kubectl-linux-v1.20.4+vmware.1
+#chmod +x kubelet-linux-v1.20.4+vmware.1
+#cp kubeadm-linux-v1.20.4+vmware.1 /usr/local/bin/kubeadm
+#cp kubectl-linux-v1.20.4+vmware.1 /usr/local/bin/kubectl
+#cp kubelet-linux-v1.20.4+vmware.1 /usr/local/bin/kubelet
 
 
 echo 'installing required software for NFS'
@@ -70,10 +84,10 @@ systemctl disable nfs-kernel-server.service
 # prevent updates to software that CSE depends on
 apt-mark hold open-vm-tools
 apt-mark hold docker
-#apt-mark hold kubelet
-#apt-mark hold kubeadm
-#apt-mark hold kubectl
-#apt-mark hold kubernetes-cni
+apt-mark hold kubelet
+apt-mark hold kubeadm
+apt-mark hold kubectl
+apt-mark hold kubernetes-cni
 apt-mark hold nfs-common
 apt-mark hold nfs-kernel-server
 
