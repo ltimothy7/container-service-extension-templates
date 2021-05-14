@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 set -e
 while [ `systemctl is-active docker` != 'active' ]; do echo 'waiting for docker'; sleep 5; done
-kubeadm init --pod-network-cidr=100.66.0.0/16 --service-cidr=100.77.0.0/16 --kubernetes-version=v1.20.4 > /root/kubeadm-init.out
+kubeadm init \
+  --pod-network-cidr=100.66.0.0/16 \
+  --service-cidr=100.77.0.0/16 \
+  --kubernetes-version=1.20.4+vmware.1-1 \
+  --image-repository=projects.registry.vmware.com/tkg \
+  > /root/kubeadm-init.out
 mkdir -p /root/.kube
 cp -f /etc/kubernetes/admin.conf /root/.kube/config
 chown $(id -u):$(id -g) /root/.kube/config

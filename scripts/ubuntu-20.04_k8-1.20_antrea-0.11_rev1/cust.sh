@@ -54,7 +54,21 @@ apt install -y ./kubeadm_1.20.4+vmware.1-1_amd64.deb ./kubectl_1.20.4+vmware.1-1
 systemctl restart kubelet
 while [ `systemctl is-active kubelet` != 'active' ]; do echo 'waiting for kubelet'; sleep 5; done
 
-
+# Install kubernetes components, coredns, and antrea binary
+wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/images/kube-proxy-v1.20.4_vmware.1.tar.gz
+wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/images/kube-apiserver-v1.20.4_vmware.1.tar.gz
+wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/images/kube-controller-manager-v1.20.4_vmware.1.tar.gz
+wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/images/kube-scheduler-v1.20.4_vmware.1.tar.gz
+wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654397/publish/lin64/etcd/images/etcd-v3.4.13_vmware.7.tar.gz
+wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654431/publish/lin64/coredns/images/coredns-v1.7.0_vmware.8.tar.gz
+wget http://build-squid.eng.vmware.com/build/mts/release/bora-17827694/publish/lin64/antrea/images/antrea-debian-v0.11.3_vmware.2.tar.gz
+docker load -i kube-proxy-v1.20.4_vmware.1.tar.gz
+docker load -i kube-apiserver-v1.20.4_vmware.1.tar.gz
+docker load -i kube-controller-manager-v1.20.4_vmware.1.tar.gz
+docker load -i kube-scheduler-v1.20.4_vmware.1.tar.gz
+docker load -i etcd-v3.4.13_vmware.7.tar.gz
+docker load -i coredns-v1.7.0_vmware.8.tar.gz
+docker load -i antrea-debian-v0.11.3_vmware.2.tar.gz
 
 echo 'installing required software for NFS'
 apt-get -q install -y nfs-common nfs-kernel-server
@@ -77,7 +91,7 @@ echo 'upgrading the system'
 apt-get -q update -o Acquire::Retries=3 -o Acquire::http::No-Cache=True -o Acquire::http::Timeout=30 -o Acquire::https::No-Cache=True -o Acquire::https::Timeout=30 -o Acquire::ftp::Timeout=30
 apt-get -y -q -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade
 
-# Download weave.yml to /root/weave_v2-6-5.yml
+# Download antrea.yml to /root/antrea_0.11.3.yaml
 export kubever=$(kubectl version --client | base64 | tr -d '\n')
 /sbin/modprobe openvswitch
 wget --no-verbose -O /root/antrea_0.11.3.yaml https://github.com/vmware-tanzu/antrea/releases/download/v0.11.3/antrea.yml
