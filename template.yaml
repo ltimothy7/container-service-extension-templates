@@ -2,9 +2,9 @@ templates:
   - compute_policy: ""
     cpu: 2
     deprecated: false
-    description: "Ubuntu 20.04, Docker-ce 19.03.15, Kubernetes 1.20.4, Antrea 0.11.3"
+    description: "Ubuntu 20.04, Docker-ce 19.03.15, Kubernetes 1.20.4 (VMware TKG-m), Antrea 0.11.3"
     mem: 2048
-    name: ubuntu-20.04_k8-1.20_antrea-0.11
+    name: ubuntu-20.04_tkgm-1.20_antrea-0.11
     revision: 1
     kind: native
     sha256_ova: c7033a0dd298f6f96b1e50e93121d02d967dad9d4a618de5a21bfd33db7b8f36
@@ -16,6 +16,8 @@ templates:
     kubernetes_version: "1.20.4"
     cni: "antrea"
     cni_version: "0.11.3"
+    upgrade_from:
+      - ""
   -
     compute_policy: ""
     cpu: 2
