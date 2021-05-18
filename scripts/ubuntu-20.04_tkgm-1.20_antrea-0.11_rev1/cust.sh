@@ -55,6 +55,9 @@ apt install -y ./kubeadm_1.20.4+vmware.1-1_amd64.deb ./kubectl_1.20.4+vmware.1-1
 systemctl restart kubelet
 while [ `systemctl is-active kubelet` != 'active' ]; do echo 'waiting for kubelet'; sleep 5; done
 
+# set up local container image repository
+docker run -d -p 5000:5000 --restart=always --name registry registry:2
+
 # Install kubernetes components, coredns, and antrea binary
 wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/images/kube-proxy-v1.20.4_vmware.1.tar.gz
 wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/images/kube-apiserver-v1.20.4_vmware.1.tar.gz
@@ -99,10 +102,10 @@ echo 'upgrading the system'
 apt-get -q update -o Acquire::Retries=3 -o Acquire::http::No-Cache=True -o Acquire::http::Timeout=30 -o Acquire::https::No-Cache=True -o Acquire::https::Timeout=30 -o Acquire::ftp::Timeout=30
 apt-get -y -q -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade
 
-# Download antrea.yml to /root/antrea_0.11.3.yaml
+# Download antrea.yml to /root/antrea_0.11.3.yml
 export kubever=$(kubectl version --client | base64 | tr -d '\n')
 /sbin/modprobe openvswitch
-wget --no-verbose -O /root/antrea_0.11.3.yaml https://github.com/vmware-tanzu/antrea/releases/download/v0.11.3/antrea.yml
+wget --no-verbose -O /root/antrea_0.11.3.yml https://github.com/vmware-tanzu/antrea/releases/download/v0.11.3/antrea.yml
 
 # /etc/machine-id must be empty so that new machine-id gets assigned on boot (in our case boot is vApp deployment)
 # https://jaylacroix.com/fixing-ubuntu-18-04-virtual-machines-that-fight-over-the-same-ip-address/
@@ -113,6 +116,9 @@ ln -fs /etc/machine-id /var/lib/dbus/machine-id || : # dbus/machine-id is symlin
 echo 'deleting downloaded files'
 rm *.tar.gz* || :
 rm *.deb* || :
+
+# enable kubelet service
+systemctl enable kubelet
 
 sync
 sync

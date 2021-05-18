@@ -5,13 +5,13 @@ kubeadm init \
   --pod-network-cidr=100.66.0.0/16 \
   --service-cidr=100.77.0.0/16 \
   --kubernetes-version=1.20.4+vmware.1-1 \
-  --image-repository=projects.registry.vmware.com/tkg \
+  --image-repository "localhost:5000" \
   > /root/kubeadm-init.out
 mkdir -p /root/.kube
 cp -f /etc/kubernetes/admin.conf /root/.kube/config
 chown $(id -u):$(id -g) /root/.kube/config
 
 export kubever=$(kubectl version --client | base64 | tr -d '\n')
-kubectl apply -f /root/antrea_0.11.3.yaml
+kubectl apply -f /root/antrea_0.11.3.yml
 systemctl restart kubelet
 while [ `systemctl is-active kubelet` != 'active' ]; do echo 'waiting for kubelet'; sleep 5; done
