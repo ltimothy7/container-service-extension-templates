@@ -2,8 +2,8 @@
 set -e
 while [ `systemctl is-active docker` != 'active' ]; do echo 'waiting for docker'; sleep 5; done
 kubeadm init \
-  --pod-network-cidr=100.66.0.0/16 \
-  --service-cidr=100.77.0.0/16 \
+  --pod-network-cidr={pod_network_cidr} \
+  --service-cidr={service_cidr} \
   --kubernetes-version=1.20.4+vmware.1-1 \
   --image-repository "localhost:5000" \
   > /root/kubeadm-init.out
