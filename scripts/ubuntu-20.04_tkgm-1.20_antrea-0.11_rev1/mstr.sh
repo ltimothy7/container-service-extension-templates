@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 set -e
 while [ `systemctl is-active docker` != 'active' ]; do echo 'waiting for docker'; sleep 5; done
-kubeadm init --kubernetes-version=v1.15.9 > /root/kubeadm-init.out
+kubeadm init \
+  --pod-network-cidr={pod_network_cidr} \
+  --service-cidr={service_cidr} \
+  --kubernetes-version=1.20.4+vmware.1-1 \
+  --image-repository "localhost:5000" \
+  > /root/kubeadm-init.out
 mkdir -p /root/.kube
 cp -f /etc/kubernetes/admin.conf /root/.kube/config
 chown $(id -u):$(id -g) /root/.kube/config
 
 export kubever=$(kubectl version --client | base64 | tr -d '\n')
-wget --no-verbose -O /root/weave.yml "https://cloud.weave.works/k8s/net?k8s-version=$kubever&v=2.5.2"
-kubectl apply -f /root/weave.yml
+kubectl apply -f /root/antrea_0.11.3.yml
 systemctl restart kubelet
 while [ `systemctl is-active kubelet` != 'active' ]; do echo 'waiting for kubelet'; sleep 5; done
