@@ -74,10 +74,10 @@ docker load -i etcd-v3.4.13_vmware.7.tar.gz
 docker load -i coredns-v1.7.0_vmware.8.tar.gz
 docker load -i antrea-debian-v0.11.3_vmware.2.tar.gz
 
-docker tag projects.registry.vmware.com/tkg/kube-proxy:v1.20.4_vmware.1 localhost:5000/kube-proxy:v1.20.4_vmware.1
-docker tag projects.registry.vmware.com/tkg/kube-apiserver:v1.20.4_vmware.1 localhost:5000/kube-apiserver:v1.20.4_vmware.1
-docker tag projects.registry.vmware.com/tkg/kube-controller-manager:v1.20.4_vmware.1 localhost:5000/kube-controller-manager:v1.20.4_vmware.1
-docker tag projects.registry.vmware.com/tkg/kube-scheduler:v1.20.4_vmware.1 localhost:5000/kube-scheduler:v1.20.4_vmware.1
+docker tag projects.registry.vmware.com/tkg/kube-proxy:v1.20.4_vmware.1 localhost:5000/kube-proxy:v1.20.4
+docker tag projects.registry.vmware.com/tkg/kube-apiserver:v1.20.4_vmware.1 localhost:5000/kube-apiserver:v1.20.4
+docker tag projects.registry.vmware.com/tkg/kube-controller-manager:v1.20.4_vmware.1 localhost:5000/kube-controller-manager:v1.20.4
+docker tag projects.registry.vmware.com/tkg/kube-scheduler:v1.20.4_vmware.1 localhost:5000/kube-scheduler:v1.20.4
 docker tag projects.registry.vmware.com/tkg/etcd:v3.4.13_vmware.7 localhost:5000/etcd:3.4.13-0
 docker tag projects.registry.vmware.com/tkg/coredns:v1.7.0_vmware.8 localhost:5000/coredns:1.7.0
 
