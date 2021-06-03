@@ -66,6 +66,7 @@ wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/l
 wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654397/publish/lin64/etcd/images/etcd-v3.4.13_vmware.7.tar.gz
 wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654431/publish/lin64/coredns/images/coredns-v1.7.0_vmware.8.tar.gz
 wget http://build-squid.eng.vmware.com/build/mts/release/bora-17827694/publish/lin64/antrea/images/antrea-debian-v0.11.3_vmware.2.tar.gz
+wget http://build-squid.eng.vmware.com/build/mts/release/bora-17654488/publish/lin64/kubernetes/images/pause-3.2.tar.gz
 docker load -i kube-proxy-v1.20.4_vmware.1.tar.gz
 docker load -i kube-apiserver-v1.20.4_vmware.1.tar.gz
 docker load -i kube-controller-manager-v1.20.4_vmware.1.tar.gz
@@ -73,13 +74,15 @@ docker load -i kube-scheduler-v1.20.4_vmware.1.tar.gz
 docker load -i etcd-v3.4.13_vmware.7.tar.gz
 docker load -i coredns-v1.7.0_vmware.8.tar.gz
 docker load -i antrea-debian-v0.11.3_vmware.2.tar.gz
+docker load -i pause-3.2.tar.gz
 
-docker tag projects.registry.vmware.com/tkg/kube-proxy:v1.20.4_vmware.1 localhost:5000/kube-proxy:v1.20.4_vmware.1
-docker tag projects.registry.vmware.com/tkg/kube-apiserver:v1.20.4_vmware.1 localhost:5000/kube-apiserver:v1.20.4_vmware.1
-docker tag projects.registry.vmware.com/tkg/kube-controller-manager:v1.20.4_vmware.1 localhost:5000/kube-controller-manager:v1.20.4_vmware.1
-docker tag projects.registry.vmware.com/tkg/kube-scheduler:v1.20.4_vmware.1 localhost:5000/kube-scheduler:v1.20.4_vmware.1
+docker tag projects.registry.vmware.com/tkg/kube-proxy:v1.20.4_vmware.1 localhost:5000/kube-proxy:v1.20.4
+docker tag projects.registry.vmware.com/tkg/kube-apiserver:v1.20.4_vmware.1 localhost:5000/kube-apiserver:v1.20.4
+docker tag projects.registry.vmware.com/tkg/kube-controller-manager:v1.20.4_vmware.1 localhost:5000/kube-controller-manager:v1.20.4
+docker tag projects.registry.vmware.com/tkg/kube-scheduler:v1.20.4_vmware.1 localhost:5000/kube-scheduler:v1.20.4
 docker tag projects.registry.vmware.com/tkg/etcd:v3.4.13_vmware.7 localhost:5000/etcd:3.4.13-0
 docker tag projects.registry.vmware.com/tkg/coredns:v1.7.0_vmware.8 localhost:5000/coredns:1.7.0
+docker tag projects.registry.vmware.com/tkg/pause:3.2 localhost:5000/pause:3.2
 
 echo 'installing required software for NFS'
 apt-get -q install -y nfs-common nfs-kernel-server
