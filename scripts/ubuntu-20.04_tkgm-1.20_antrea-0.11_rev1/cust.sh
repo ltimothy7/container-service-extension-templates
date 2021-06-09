@@ -51,9 +51,6 @@ apt install -y ./kubeadm_1.20.4+vmware.1-1_amd64.deb ./kubectl_1.20.4+vmware.1-1
 systemctl restart kubelet
 while [ `systemctl is-active kubelet` != 'active' ]; do echo 'waiting for kubelet'; sleep 5; done
 
-# set up local container image repository
-docker run -d -p 5000:5000 --restart=always --name registry registry:2
-
 # Install kubernetes components, coredns, and antrea binary
 wget https://github.com/ltimothy7/container-service-extension-templates/raw/tkgm/tkgm_build_artifacts/1_3_0/kube-proxy-v1.20.4_vmware.1.tar.gz
 wget https://github.com/ltimothy7/container-service-extension-templates/raw/tkgm/tkgm_build_artifacts/1_3_0/kube-apiserver-v1.20.4_vmware.1.tar.gz
@@ -74,13 +71,13 @@ docker load -i coredns-v1.7.0_vmware.8.tar.gz
 docker load -i antrea-debian-v0.11.3_vmware.2.tar.gz
 docker load -i pause-3.2.tar.gz
 
-docker tag projects.registry.vmware.com/tkg/kube-proxy:v1.20.4_vmware.1 localhost:5000/kube-proxy:v1.20.4
-docker tag projects.registry.vmware.com/tkg/kube-apiserver:v1.20.4_vmware.1 localhost:5000/kube-apiserver:v1.20.4
-docker tag projects.registry.vmware.com/tkg/kube-controller-manager:v1.20.4_vmware.1 localhost:5000/kube-controller-manager:v1.20.4
-docker tag projects.registry.vmware.com/tkg/kube-scheduler:v1.20.4_vmware.1 localhost:5000/kube-scheduler:v1.20.4
-docker tag projects.registry.vmware.com/tkg/etcd:v3.4.13_vmware.7 localhost:5000/etcd:3.4.13-0
-docker tag projects.registry.vmware.com/tkg/coredns:v1.7.0_vmware.8 localhost:5000/coredns:1.7.0
-docker tag projects.registry.vmware.com/tkg/pause:3.2 localhost:5000/pause:3.2
+docker tag projects.registry.vmware.com/tkg/kube-proxy:v1.20.4_vmware.1 k8s.gcr.io/kube-proxy:v1.20.4-vmware.1
+docker tag projects.registry.vmware.com/tkg/kube-apiserver:v1.20.4_vmware.1 k8s.gcr.io/kube-apiserver:v1.20.4-vmware.1
+docker tag projects.registry.vmware.com/tkg/kube-controller-manager:v1.20.4_vmware.1 k8s.gcr.io/kube-controller-manager:v1.20.4-vmware.1
+docker tag projects.registry.vmware.com/tkg/kube-scheduler:v1.20.4_vmware.1 k8s.gcr.io/kube-scheduler:v1.20.4-vmware.1
+docker tag projects.registry.vmware.com/tkg/etcd:v3.4.13_vmware.7 k8s.gcr.io/etcd:3.4.13-0-vmware.7
+docker tag projects.registry.vmware.com/tkg/coredns:v1.7.0_vmware.8 k8s.gcr.io/coredns:1.7.0-vmware.8
+docker tag projects.registry.vmware.com/tkg/pause:3.2 k8s.gcr.io/pause:3.2
 
 echo 'installing required software for NFS'
 apt-get -q install -y nfs-common nfs-kernel-server

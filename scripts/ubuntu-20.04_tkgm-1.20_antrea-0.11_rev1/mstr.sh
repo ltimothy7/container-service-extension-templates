@@ -4,8 +4,7 @@ while [ `systemctl is-active docker` != 'active' ]; do echo 'waiting for docker'
 kubeadm init \
   --pod-network-cidr={pod_network_cidr} \
   --service-cidr={service_cidr} \
-  --kubernetes-version=1.20.4 \
-  --image-repository "localhost:5000" \
+  --kubernetes-version=1.20.4-vmware.1 \
   > /root/kubeadm-init.out
 mkdir -p /root/.kube
 cp -f /etc/kubernetes/admin.conf /root/.kube/config
