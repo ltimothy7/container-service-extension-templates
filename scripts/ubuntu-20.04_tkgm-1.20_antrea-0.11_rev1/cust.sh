@@ -9,16 +9,12 @@ echo 'net.ipv6.conf.lo.disable_ipv6 = 1' >> /etc/sysctl.conf
 sudo sysctl -p
 
 # setup resolvconf for ubuntu 20
-echo 'nameserver 8.8.4.4' >> /etc/resolv.conf
 echo 'nameserver 8.8.8.8' >> /etc/resolv.conf
 apt update
 apt install resolvconf
 systemctl restart resolvconf.service
-echo 'nameserver 10.16.188.210' >> /etc/resolvconf/resolv.conf.d/head
-echo 'nameserver 10.118.254.1' >> /etc/resolvconf/resolv.conf.d/head
+while [ `systemctl is-active resolvconf` != 'active' ]; do echo 'waiting for resolvconf'; sleep 5; done
 echo 'nameserver 8.8.8.8' >> /etc/resolvconf/resolv.conf.d/head
-echo 'nameserver 8.8.4.4' >> /etc/resolvconf/resolv.conf.d/head
-resolvconf --enable-updates
 resolvconf -u
 
 #systemctl restart networking.service
@@ -47,9 +43,9 @@ apt-get -q install -y kubernetes-cni=0.8.7-00 # kubernetes-cni is needed for kub
 apt-get -q install -y docker-ce=5:19.03.15~3-0~ubuntu-focal docker-ce-cli=5:19.03.15~3-0~ubuntu-focal containerd.io
 systemctl restart docker
 while [ `systemctl is-active docker` != 'active' ]; do echo 'waiting for docker'; sleep 5; done
-wget https://github.com/ltimothy7/container-service-extension-templates/blob/tkgm/tkgm_build_artifacts/1_3_0/kubeadm_1.20.4%2Bvmware.1-1_amd64.deb
-wget https://github.com/ltimothy7/container-service-extension-templates/blob/tkgm/tkgm_build_artifacts/1_3_0/kubectl_1.20.4%2Bvmware.1-1_amd64.deb
-wget https://github.com/ltimothy7/container-service-extension-templates/blob/tkgm/tkgm_build_artifacts/1_3_0/kubelet_1.20.4%2Bvmware.1-1_amd64.deb
+wget https://github.com/ltimothy7/container-service-extension-templates/raw/tkgm/tkgm_build_artifacts/1_3_0/kubeadm_1.20.4%2Bvmware.1-1_amd64.deb
+wget https://github.com/ltimothy7/container-service-extension-templates/raw/tkgm/tkgm_build_artifacts/1_3_0/kubectl_1.20.4%2Bvmware.1-1_amd64.deb
+wget https://github.com/ltimothy7/container-service-extension-templates/raw/tkgm/tkgm_build_artifacts/1_3_0/kubelet_1.20.4%2Bvmware.1-1_amd64.deb
 # Installing all three at once since they depend on one another
 apt install -y ./kubeadm_1.20.4+vmware.1-1_amd64.deb ./kubectl_1.20.4+vmware.1-1_amd64.deb ./kubelet_1.20.4+vmware.1-1_amd64.deb
 systemctl restart kubelet
@@ -59,15 +55,15 @@ while [ `systemctl is-active kubelet` != 'active' ]; do echo 'waiting for kubele
 docker run -d -p 5000:5000 --restart=always --name registry registry:2
 
 # Install kubernetes components, coredns, and antrea binary
-wget https://github.com/ltimothy7/container-service-extension-templates/blob/tkgm/tkgm_build_artifacts/1_3_0/kube-proxy-v1.20.4_vmware.1.tar.gz
-wget https://github.com/ltimothy7/container-service-extension-templates/blob/tkgm/tkgm_build_artifacts/1_3_0/kube-apiserver-v1.20.4_vmware.1.tar.gz
-wget https://github.com/ltimothy7/container-service-extension-templates/blob/tkgm/tkgm_build_artifacts/1_3_0/kube-controller-manager-v1.20.4_vmware.1.tar.gz
-wget https://github.com/ltimothy7/container-service-extension-templates/blob/tkgm/tkgm_build_artifacts/1_3_0/kube-scheduler-v1.20.4_vmware.1.tar.gz
-wget https://github.com/ltimothy7/container-service-extension-templates/blob/tkgm/tkgm_build_artifacts/1_3_0/etcd-v3.4.13_vmware.7.tar.gz
-wget https://github.com/ltimothy7/container-service-extension-templates/blob/tkgm/tkgm_build_artifacts/1_3_0/coredns-v1.7.0_vmware.8.tar.gz
-wget https://github.com/ltimothy7/container-service-extension-templates/blob/tkgm/tkgm_build_artifacts/1_3_0/pause-3.2.tar.gz
-wget https://github.com/ltimothy7/container-service-extension-templates/blob/tkgm/tkgm_build_artifacts/1_3_0/antrea-debian-v0.11.3_vmware.2.tar.gz.partaa
-wget https://github.com/ltimothy7/container-service-extension-templates/blob/tkgm/tkgm_build_artifacts/1_3_0/antrea-debian-v0.11.3_vmware.2.tar.gz.partab
+wget https://github.com/ltimothy7/container-service-extension-templates/raw/tkgm/tkgm_build_artifacts/1_3_0/kube-proxy-v1.20.4_vmware.1.tar.gz
+wget https://github.com/ltimothy7/container-service-extension-templates/raw/tkgm/tkgm_build_artifacts/1_3_0/kube-apiserver-v1.20.4_vmware.1.tar.gz
+wget https://github.com/ltimothy7/container-service-extension-templates/raw/tkgm/tkgm_build_artifacts/1_3_0/kube-controller-manager-v1.20.4_vmware.1.tar.gz
+wget https://github.com/ltimothy7/container-service-extension-templates/raw/tkgm/tkgm_build_artifacts/1_3_0/kube-scheduler-v1.20.4_vmware.1.tar.gz
+wget https://github.com/ltimothy7/container-service-extension-templates/raw/tkgm/tkgm_build_artifacts/1_3_0/etcd-v3.4.13_vmware.7.tar.gz
+wget https://github.com/ltimothy7/container-service-extension-templates/raw/tkgm/tkgm_build_artifacts/1_3_0/coredns-v1.7.0_vmware.8.tar.gz
+wget https://github.com/ltimothy7/container-service-extension-templates/raw/tkgm/tkgm_build_artifacts/1_3_0/pause-3.2.tar.gz
+wget https://github.com/ltimothy7/container-service-extension-templates/raw/tkgm/tkgm_build_artifacts/1_3_0/antrea-debian-v0.11.3_vmware.2.tar.gz.partaa
+wget https://github.com/ltimothy7/container-service-extension-templates/raw/tkgm/tkgm_build_artifacts/1_3_0/antrea-debian-v0.11.3_vmware.2.tar.gz.partab
 cat antrea-debian-v0.11.3_vmware.2.tar.gz.partaa antrea-debian-v0.11.3_vmware.2.tar.gz.partab > antrea-debian-v0.11.3_vmware.2.tar.gz
 docker load -i kube-proxy-v1.20.4_vmware.1.tar.gz
 docker load -i kube-apiserver-v1.20.4_vmware.1.tar.gz
