@@ -84,3 +84,5 @@ spec:
   .
 ```
 Note, the value in `kind` field is not `native` but `TKGm`.
+
+Read more about TKGm at [here](Link to Anupam's blog).
