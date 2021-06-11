@@ -31,7 +31,7 @@ The template name and revision can be retrieved using
 cse template list -c [config file]
 ```
 Provider should make sure that the `remote_template_cookbook_url` points to the
-`TKGm` template repo and not the standard CSE template repo.
+`TKGm` template repository and not the standard CSE template repository.
 
 ### Enabling Tenant OrgVDC for TKGm
 Once TKGm has been enabled for CSE server and the TKGm template is created, provider
@@ -57,7 +57,7 @@ vcd cse ovdc disable [OrgVDC name] -o [Org name] --tkg-m
 
 Tenant users who have the CSE native rights and are able to deploy CSE native clusters,
 will also be able to deploy TKGm runtime based clusters on OrgVDCs that are enabled
-for TKGm runtime. They will needs to enable `TKGm` options in `vcd-cli` via setting the
+for TKGm runtime. They will need to enable `TKGm` options in `vcd-cli` via setting the
 following environment variable.
 ```sh
 export CSE_TKG_M_ENABLED=True
