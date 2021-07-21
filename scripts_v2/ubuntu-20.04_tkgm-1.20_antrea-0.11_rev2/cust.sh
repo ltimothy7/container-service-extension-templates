@@ -12,28 +12,13 @@ echo 'net.ipv6.conf.default.disable_ipv6 = 1' >> /etc/sysctl.conf
 echo 'net.ipv6.conf.lo.disable_ipv6 = 1' >> /etc/sysctl.conf
 sudo sysctl -p
 
-# TODO: uncomment out this block once internal vmware access not needed and remove following block
-## setup resolvconf for ubuntu 20
-#echo 'nameserver 8.8.8.8' >> /etc/resolv.conf
-#apt update
-#apt install resolvconf
-#systemctl restart resolvconf.service
-#while [ `systemctl is-active resolvconf` != 'active' ]; do echo 'waiting for resolvconf'; sleep 5; done
-#echo 'nameserver 8.8.8.8' >> /etc/resolvconf/resolv.conf.d/head
-#resolvconf -u
-
-# setup resolvconf for ubuntu 20 to access eng.vmware.com
-echo 'nameserver 8.8.4.4' >> /etc/resolv.conf
+# setup resolvconf for ubuntu 20
 echo 'nameserver 8.8.8.8' >> /etc/resolv.conf
 apt update
 apt install resolvconf
 systemctl restart resolvconf.service
 while [ `systemctl is-active resolvconf` != 'active' ]; do echo 'waiting for resolvconf'; sleep 5; done
-echo 'nameserver 10.16.188.210' >> /etc/resolvconf/resolv.conf.d/head
-echo 'nameserver 10.118.254.1' >> /etc/resolvconf/resolv.conf.d/head
 echo 'nameserver 8.8.8.8' >> /etc/resolvconf/resolv.conf.d/head
-echo 'nameserver 8.8.4.4' >> /etc/resolvconf/resolv.conf.d/head
-resolvconf --enable-updates
 resolvconf -u
 
 #systemctl restart networking.service
