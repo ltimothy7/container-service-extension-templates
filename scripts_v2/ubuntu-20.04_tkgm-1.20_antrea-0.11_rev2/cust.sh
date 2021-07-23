@@ -12,14 +12,29 @@ echo 'net.ipv6.conf.default.disable_ipv6 = 1' >> /etc/sysctl.conf
 echo 'net.ipv6.conf.lo.disable_ipv6 = 1' >> /etc/sysctl.conf
 sudo sysctl -p
 
-# setup resolvconf for ubuntu 20
+# setup resolvconf for ubuntu 20 to access eng.vmware.com
+echo 'nameserver 8.8.4.4' >> /etc/resolv.conf
 echo 'nameserver 8.8.8.8' >> /etc/resolv.conf
 apt update
 apt install resolvconf
 systemctl restart resolvconf.service
 while [ `systemctl is-active resolvconf` != 'active' ]; do echo 'waiting for resolvconf'; sleep 5; done
+echo 'nameserver 10.16.188.210' >> /etc/resolvconf/resolv.conf.d/head
+echo 'nameserver 10.118.254.1' >> /etc/resolvconf/resolv.conf.d/head
 echo 'nameserver 8.8.8.8' >> /etc/resolvconf/resolv.conf.d/head
+echo 'nameserver 8.8.4.4' >> /etc/resolvconf/resolv.conf.d/head
+resolvconf --enable-updates
 resolvconf -u
+
+# TODO: uncomment out once eng.vmware.com access no longer needed
+## setup resolvconf for ubuntu 20
+#echo 'nameserver 8.8.8.8' >> /etc/resolv.conf
+#apt update
+#apt install resolvconf
+#systemctl restart resolvconf.service
+#while [ `systemctl is-active resolvconf` != 'active' ]; do echo 'waiting for resolvconf'; sleep 5; done
+#echo 'nameserver 8.8.8.8' >> /etc/resolvconf/resolv.conf.d/head
+#resolvconf -u
 
 #systemctl restart networking.service
 systemctl restart systemd-networkd.service
@@ -101,6 +116,8 @@ wget --no-verbose -O /root/antrea_0.11.3.yml https://github.com/vmware-tanzu/ant
 
 # Download cpi and csi yaml
 wget -O /root/cloud-director-ccm.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/cloud-director-ccm.yaml
+wget -O /root/vcloud-basic-auth.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/vcloud-basic-auth.yaml
+wget -O /root/vcloud-configmap.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/vcloud-configmap.yaml
 wget -O /root/csi-driver.yaml https://github.com/vmware/cloud-director-named-disk-csi-driver/raw/main/manifests/csi-driver.yaml
 wget -O /root/csi-controller.yaml https://github.com/vmware/cloud-director-named-disk-csi-driver/raw/main/manifests/csi-controller.yaml
 wget -O /root/csi-node.yaml https://github.com/vmware/cloud-director-named-disk-csi-driver/raw/main/manifests/csi-node.yaml
