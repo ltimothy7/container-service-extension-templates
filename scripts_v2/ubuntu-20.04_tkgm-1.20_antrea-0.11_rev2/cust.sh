@@ -115,9 +115,13 @@ export kubever=$(kubectl version --client | base64 | tr -d '\n')
 wget --no-verbose -O /root/antrea_0.11.3.yml https://github.com/vmware-tanzu/antrea/releases/download/v0.11.3/antrea.yml
 
 # Download cpi and csi yaml
-wget -O /root/cloud-director-ccm.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/cloud-director-ccm.yaml
-wget -O /root/vcloud-basic-auth.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/vcloud-basic-auth.yaml
-wget -O /root/vcloud-configmap.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/vcloud-configmap.yaml
+#wget -O /root/vcloud-basic-auth.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/vcloud-basic-auth.yaml
+#wget -O /root/vcloud-configmap.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/vcloud-configmap.yaml
+#wget -O /root/cloud-director-ccm.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/cloud-director-ccm.yaml
+# TODO: change to use main branch links
+wget -O /root/vcloud-basic-auth.yaml https://raw.githubusercontent.com/ltimothy7/cloud-provider-for-cloud-director/auth_mount/manifests/vcloud-basic-auth.yaml
+wget -O /root/vcloud-configmap.yaml https://raw.githubusercontent.com/ltimothy7/cloud-provider-for-cloud-director/auth_mount/manifests/vcloud-configmap.yaml
+wget -O /root/cloud-director-ccm.yaml https://raw.githubusercontent.com/ltimothy7/cloud-provider-for-cloud-director/auth_mount/manifests/cloud-director-ccm.yaml
 wget -O /root/csi-driver.yaml https://github.com/vmware/cloud-director-named-disk-csi-driver/raw/main/manifests/csi-driver.yaml
 wget -O /root/csi-controller.yaml https://github.com/vmware/cloud-director-named-disk-csi-driver/raw/main/manifests/csi-controller.yaml
 wget -O /root/csi-node.yaml https://github.com/vmware/cloud-director-named-disk-csi-driver/raw/main/manifests/csi-node.yaml
@@ -161,11 +165,27 @@ etcd:
     imageRepository: projects.registry.vmware.com/tkg
     imageTag: $etcd_image_version
 networking:
-  serviceSubnet: 100.77.0.0/16
-  podSubnet: 100.66.0.0/16
+  serviceSubnet: SERVICE_SUBNET_CIDR
+  podSubnet: POD_SUBNET_CIDR
 imageRepository: projects.registry.vmware.com/tkg
 kubernetesVersion: $kubernetes_version
 ---" > /root/kubeadm-defaults.conf
+
+echo "---
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: JoinConfiguration
+caCertPath: /etc/kubernetes/pki/ca.crt
+discovery:
+  bootstrapToken:
+    apiServerEndpoint: IP_PORT
+    token: {token}
+    unsafeSkipCAVerification: false
+    caCertHashes: [DISCOVERY_TOKEN_CA_CERT_HASH]
+  timeout: 5m0s
+nodeRegistration:
+  kubeletExtraArgs:
+    cloud-provider: external
+" > /root/kubeadm-defaults-join.conf
 
 sync
 sync
