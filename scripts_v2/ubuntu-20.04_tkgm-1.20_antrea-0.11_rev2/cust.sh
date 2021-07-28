@@ -178,9 +178,9 @@ caCertPath: /etc/kubernetes/pki/ca.crt
 discovery:
   bootstrapToken:
     apiServerEndpoint: IP_PORT
-    token: {token}
+    token: TOKEN
     unsafeSkipCAVerification: false
-    caCertHashes: [DISCOVERY_TOKEN_CA_CERT_HASH]
+    caCertHashes: [DISCOVERY_CA_CERT_HASH]
   timeout: 5m0s
 nodeRegistration:
   kubeletExtraArgs:
