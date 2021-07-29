@@ -12,7 +12,7 @@ echo 'net.ipv6.conf.default.disable_ipv6 = 1' >> /etc/sysctl.conf
 echo 'net.ipv6.conf.lo.disable_ipv6 = 1' >> /etc/sysctl.conf
 sudo sysctl -p
 
-# setup resolvconf for ubuntu 20 to access eng.vmware.com
+# setup resolvconf for ubuntu 20 to access eng.vmware.com -- needed for vm to talk with vcd
 echo 'nameserver 8.8.4.4' >> /etc/resolv.conf
 echo 'nameserver 8.8.8.8' >> /etc/resolv.conf
 apt update
@@ -115,13 +115,9 @@ export kubever=$(kubectl version --client | base64 | tr -d '\n')
 wget --no-verbose -O /root/antrea_0.11.3.yml https://github.com/vmware-tanzu/antrea/releases/download/v0.11.3/antrea.yml
 
 # Download cpi and csi yaml
-#wget -O /root/vcloud-basic-auth.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/vcloud-basic-auth.yaml
-#wget -O /root/vcloud-configmap.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/vcloud-configmap.yaml
-#wget -O /root/cloud-director-ccm.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/cloud-director-ccm.yaml
-# TODO: change to use main branch links
-wget -O /root/vcloud-basic-auth.yaml https://raw.githubusercontent.com/ltimothy7/cloud-provider-for-cloud-director/auth_mount/manifests/vcloud-basic-auth.yaml
-wget -O /root/vcloud-configmap.yaml https://raw.githubusercontent.com/ltimothy7/cloud-provider-for-cloud-director/auth_mount/manifests/vcloud-configmap.yaml
-wget -O /root/cloud-director-ccm.yaml https://raw.githubusercontent.com/ltimothy7/cloud-provider-for-cloud-director/auth_mount/manifests/cloud-director-ccm.yaml
+wget -O /root/vcloud-basic-auth.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/vcloud-basic-auth.yaml
+wget -O /root/vcloud-configmap.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/vcloud-configmap.yaml
+wget -O /root/cloud-director-ccm.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/cloud-director-ccm.yaml
 wget -O /root/csi-driver.yaml https://github.com/vmware/cloud-director-named-disk-csi-driver/raw/main/manifests/csi-driver.yaml
 wget -O /root/csi-controller.yaml https://github.com/vmware/cloud-director-named-disk-csi-driver/raw/main/manifests/csi-controller.yaml
 wget -O /root/csi-node.yaml https://github.com/vmware/cloud-director-named-disk-csi-driver/raw/main/manifests/csi-node.yaml
