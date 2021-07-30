@@ -119,9 +119,9 @@ wget --no-verbose -O /root/antrea_0.11.3.yml https://github.com/vmware-tanzu/ant
 #wget -O /root/vcloud-configmap.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/vcloud-configmap.yaml
 #wget -O /root/cloud-director-ccm.yaml https://raw.githubusercontent.com/vmware/cloud-provider-for-cloud-director/main/manifests/cloud-director-ccm.yaml
 # TODO: change to use main branch links
-wget -O /root/vcloud-basic-auth.yaml https://raw.githubusercontent.com/ltimothy7/cloud-provider-for-cloud-director/auth_mount/manifests/vcloud-basic-auth.yaml
-wget -O /root/vcloud-configmap.yaml https://raw.githubusercontent.com/ltimothy7/cloud-provider-for-cloud-director/auth_mount/manifests/vcloud-configmap.yaml
-wget -O /root/cloud-director-ccm.yaml https://raw.githubusercontent.com/ltimothy7/cloud-provider-for-cloud-director/auth_mount/manifests/cloud-director-ccm.yaml
+wget -O /root/vcloud-basic-auth.yaml https://raw.githubusercontent.com/ltimothy7/cloud-provider-for-cloud-director/auth_mount_internal/manifests/vcloud-basic-auth.yaml
+wget -O /root/vcloud-configmap.yaml https://raw.githubusercontent.com/ltimothy7/cloud-provider-for-cloud-director/auth_mount_internal/manifests/vcloud-configmap.yaml
+wget -O /root/cloud-director-ccm.yaml https://raw.githubusercontent.com/ltimothy7/cloud-provider-for-cloud-director/auth_mount_internal/manifests/cloud-director-ccm.yaml
 wget -O /root/csi-driver.yaml https://github.com/vmware/cloud-director-named-disk-csi-driver/raw/main/manifests/csi-driver.yaml
 wget -O /root/csi-controller.yaml https://github.com/vmware/cloud-director-named-disk-csi-driver/raw/main/manifests/csi-controller.yaml
 wget -O /root/csi-node.yaml https://github.com/vmware/cloud-director-named-disk-csi-driver/raw/main/manifests/csi-node.yaml
