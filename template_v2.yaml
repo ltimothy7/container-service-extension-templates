@@ -9,7 +9,7 @@ templates:
     revision: 1
     kind: native
     sha256_ova: c9278dc5eff14768c36a4446b62e840214520f0c4c94fdea8a94b67e8d65aa54
-    source_ova: "https://download2.vmware.com/software/TKG/1.3.0/ubuntu-2004-kube-v1.20.4-vmware.1-tkg.0-16153464878630780629.ova?HashKey=125732bbd548350c441ccd74c753a478&params=%7B%22custnumber%22%3A%22dHdoaGVlJXdlJQ%3D%3D%22%2C%22sourcefilesize%22%3A%221.57+GB%22%2C%22dlgcode%22%3A%22TKG-130%22%2C%22languagecode%22%3A%22en%22%2C%22source%22%3A%22DOWNLOADS%22%2C%22downloadtype%22%3A%22manual%22%2C%22eula%22%3A%22Y%22%2C%22downloaduuid%22%3A%2215f5ef05-4d59-4086-a957-e8016587c398%22%2C%22purchased%22%3A%22N%22%2C%22dlgtype%22%3A%22Product+Binaries%22%2C%22productversion%22%3A%221.3.0%22%2C%22productfamily%22%3A%22VMware+Tanzu+Kubernetes+Grid%22%7D&AuthKey=1629251385_41ff165a848c20b434e69716aeec8ec0"
+    source_ova: "https://download2.vmware.com/software/TKG/1.3.0/ubuntu-2004-kube-v1.20.4-vmware.1-tkg.0-16153464878630780629.ova?HashKey=8cb80037cc54b56dc466f2432d03b483&params=%7B%22custnumber%22%3A%22dHdoaGVlJXdlJQ%3D%3D%22%2C%22sourcefilesize%22%3A%221.57+GB%22%2C%22dlgcode%22%3A%22TKG-130%22%2C%22languagecode%22%3A%22en%22%2C%22source%22%3A%22DOWNLOADS%22%2C%22downloadtype%22%3A%22manual%22%2C%22eula%22%3A%22Y%22%2C%22downloaduuid%22%3A%22f40280bc-a2ed-420c-bdd5-f9e9f2428aaa%22%2C%22purchased%22%3A%22N%22%2C%22dlgtype%22%3A%22Product+Binaries%22%2C%22productversion%22%3A%221.3.0%22%2C%22productfamily%22%3A%22VMware+Tanzu+Kubernetes+Grid%22%7D&AuthKey=1629997826_7ca2ea37773d2a7d42aa22403e0fce81"
     source_ova_name: ubuntu-2004-kube-v1.20.4-vmware.1-tkg.0-16153464878630780629.ova
     os: "ubuntu-20.04"
     docker_version: "n/a"
